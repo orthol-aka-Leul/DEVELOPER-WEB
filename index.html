@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Developer Console | Dashboard</title>
+    <title>Developer Console | Android, Web & Flutter Expert</title>
     <style>
         :root {
-            --bg-color: #060b13;
+            --bg-color: #0a0f1d;
             --side-panel-bg: rgba(13, 22, 38, 0.7);
             --card-bg: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(255, 255, 255, 0.07);
+            --card-border: rgba(255, 255, 255, 0.08);
             --primary-accent: #00f2fe;
             --secondary-accent: #4facfe;
             --success-color: #00e676;
             --text-main: #f1f5f9;
-            --text-muted: #64748b;
+            --text-muted: #94a3b8;
+            --sidebar-muted: #64748b;
         }
 
         * {
@@ -27,12 +28,11 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* Interactive Sticky Vector Background */
+        /* Vector Network Background Canvas */
         #vector-canvas {
             position: fixed;
             top: 0;
@@ -43,10 +43,206 @@
             pointer-events: none;
         }
 
-        /* Console App Frame Layout */
-        .console-frame {
+        /* --- View Management States --- */
+        .page-view {
+            display: none;
             position: relative;
             z-index: 2;
+            width: 100%;
+        }
+
+        .page-view.active-view {
+            display: block;
+        }
+
+        /* --- HOME PAGE STYLES --- */
+        .console-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .ads-badge {
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 20px;
+            color: var(--primary-accent);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .ads-badge:hover {
+            background: rgba(0, 242, 254, 0.2);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        .hero-dashboard {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-dashboard { grid-template-columns: 1fr; }
+        }
+
+        .main-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 50px 40px;
+            animation: fadeInLeft 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .experience-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--secondary-accent);
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, #ffffff 40%, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        /* Action Buttons Grid */
+        .action-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            color: #060b13;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.15);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 242, 254, 0.3);
+        }
+
+        .stack-grid {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tech-tag:hover {
+            border-color: var(--primary-accent);
+            background: rgba(0, 242, 254, 0.02);
+            transform: translateY(-2px);
+        }
+
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeInRight 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-num {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #fff, var(--primary-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+
+        /* --- DASHBOARD VIEW STYLES --- */
+        .console-frame {
             display: flex;
             width: 100vw;
             height: 100vh;
@@ -54,7 +250,6 @@
             -webkit-backdrop-filter: blur(10px);
         }
 
-        /* Left Console Sidebar Navigation */
         .sidebar {
             width: 260px;
             background: var(--side-panel-bg);
@@ -62,7 +257,6 @@
             display: flex;
             flex-direction: column;
             padding: 24px;
-            animation: fadeInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .console-brand {
@@ -86,7 +280,7 @@
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--text-muted);
+            color: var(--sidebar-muted);
             margin-bottom: 12px;
             font-weight: 700;
         }
@@ -120,7 +314,6 @@
             background: rgba(255, 255, 255, 0.03);
         }
 
-        /* Main Workspace Window Dashboard */
         .workspace {
             flex: 1;
             display: flex;
@@ -129,7 +322,6 @@
             overflow-y: auto;
         }
 
-        /* Top Bar Panel */
         .top-panel {
             height: 70px;
             border-bottom: 1px solid var(--card-border);
@@ -138,7 +330,6 @@
             justify-content: space-between;
             padding: 0 40px;
             background: rgba(10, 15, 26, 0.5);
-            animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .dev-profile {
@@ -172,12 +363,10 @@
             box-shadow: 0 0 12px rgba(0, 230, 118, 0.2);
         }
 
-        /* Content Area Container View Layout */
         .content-body {
             padding: 40px;
         }
 
-        /* Tab content switching states */
         .tab-view {
             display: none;
         }
@@ -198,11 +387,10 @@
         }
 
         .dashboard-header p {
-            color: var(--text-muted);
+            color: var(--sidebar-muted);
             font-size: 0.95rem;
         }
 
-        /* Overview Metrics Grid */
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -231,7 +419,7 @@
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: var(--text-muted);
+            color: var(--sidebar-muted);
             margin-bottom: 8px;
             font-weight: 600;
         }
@@ -242,7 +430,6 @@
             color: #fff;
         }
 
-        /* Application Showcase Tables / Lists */
         .console-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -304,7 +491,7 @@
 
         .app-details p {
             font-size: 0.8rem;
-            color: var(--text-muted);
+            color: var(--sidebar-muted);
         }
 
         .app-status {
@@ -317,7 +504,6 @@
             border: 1px solid rgba(0, 230, 118, 0.2);
         }
 
-        /* Action configuration parameters */
         .btn-link {
             font-size: 0.85rem;
             color: var(--primary-accent);
@@ -334,15 +520,22 @@
             box-shadow: 0 0 8px rgba(0, 242, 254, 0.3);
         }
 
-        /* Keyframe CSS Animations */
+        /* --- Keyframe Animations --- */
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-15px); }
+            from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-20px); }
+            from { opacity: 0; transform: translateX(-30px); }
             to { opacity: 1; transform: translateX(0); }
         }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
@@ -353,162 +546,240 @@
 
     <canvas id="vector-canvas"></canvas>
 
-    <div class="console-frame">
-        <aside class="sidebar">
-            <div class="console-brand">
-                <span>DEV_CONSOLE</span> v2.6
-            </div>
-            
-            <nav>
-                <div class="nav-group-label">Developer Hub</div>
-                <button class="nav-item active" onclick="switchTab('apps-tab', this)">Application Management</button>
-                <button class="nav-item" onclick="switchTab('monetization-tab', this)">Monetization Settings</button>
+    <div id="home-view" class="page-view active-view">
+        <div class="console-container">
+            <header>
+                <div class="logo">DEV_CONSOLE //</div>
+                <a href="app-ads.txt" class="ads-badge" target="_blank">✓ app-ads.txt verified</a>
+            </header>
+
+            <section class="hero-dashboard">
+                <div class="main-panel">
+                    <span class="experience-badge">Senior Engineer Portfolio</span>
+                    <h1><span>Building High-Performance Android, Web & Flutter Apps</span></h1>
+                    <p class="hero-desc">
+                        5 years of engineering experience delivering scalable mobile architectures and sleek web ecosystems for global enterprise applications.
+                    </p>
+                    
+                    <div class="action-container">
+                        <button class="btn-primary" onclick="navigateToPage('dashboard-view')">
+                            My Projects Dashboard ➔
+                        </button>
+                    </div>
+
+                    <div class="stack-grid">
+                        <div class="tech-tag">✦ Flutter / Dart</div>
+                        <div class="tech-tag">✦ Android SDK / Kotlin</div>
+                        <div class="tech-tag">✦ Modern Web / Architecture</div>
+                        <div class="tech-tag">✦ AdMob & Monetization</div>
+                    </div>
+                </div>
+
+                <div class="side-panel">
+                    <div class="stat-card">
+                        <div class="stat-num">5+ Yrs</div>
+                        <div class="stat-label">Professional Engineering Experience</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num">Multi-Platform</div>
+                        <div class="stat-label">Production Native & Hybrid Apps deployed</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+    <div id="dashboard-view" class="page-view">
+        <div class="console-frame">
+            <aside class="sidebar">
+                <div class="console-brand">
+                    <span>DEV_CONSOLE</span> v2.6
+                </div>
                 
-                <div class="nav-group-label" style="margin-top: 30px;">Account Info</div>
-                <button class="nav-item" onclick="switchTab('profile-tab', this)">Production Profile</button>
-            </nav>
-        </aside>
+                <nav>
+                    <div class="nav-group-label">Developer Hub</div>
+                    <button class="nav-item active" id="default-dashboard-tab" onclick="switchTab('apps-tab', this)">Application Management</button>
+                    <button class="nav-item" onclick="switchTab('monetization-tab', this)">Monetization Settings</button>
+                    
+                    <div class="nav-group-label" style="margin-top: 30px;">Account Info</div>
+                    <button class="nav-item" onclick="switchTab('profile-tab', this)">Production Profile</button>
 
-        <main class="workspace">
-            <div class="top-panel">
-                <div class="dev-profile">
-                    <div class="profile-status"></div>
-                    <span style="font-weight: 600; font-size: 0.95rem;">Senior Software Engineer</span>
+                    <div class="nav-group-label" style="margin-top: auto; padding-top: 20px;">Navigation</div>
+                    <button class="nav-item" onclick="navigateToPage('home-view')" style="border: 1px solid rgba(255,255,255,0.1); color: var(--primary-accent);">
+                        ← Return Home
+                    </button>
+                </nav>
+            </aside>
+
+            <main class="workspace">
+                <div class="top-panel">
+                    <div class="dev-profile">
+                        <div class="profile-status"></div>
+                        <span style="font-weight: 600; font-size: 0.95rem;">Senior Software Engineer</span>
+                    </div>
+                    <a href="app-ads.txt" class="ads-txt-badge" target="_blank">● app-ads.txt Verified</a>
                 </div>
-                <a href="app-ads.txt" class="ads-txt-badge" target="_blank">● app-ads.txt Verified</a>
-            </div>
 
-            <div class="content-body">
-                
-                <div id="apps-tab" class="tab-view active-view">
-                    <div class="dashboard-header">
-                        <h2>Application Release Management</h2>
-                        <p>Live release status tracker for current client systems and core product deployments.</p>
+                <div class="content-body">
+                    
+                    <div id="apps-tab" class="tab-view active-view">
+                        <div class="dashboard-header">
+                            <h2>Application Release Management</h2>
+                            <p>Live release status tracker for current client systems and core product deployments.</p>
+                        </div>
+
+                        <section class="console-card">
+                            <div class="card-title">Active Production Repositories</div>
+                            
+                            <div class="app-row">
+                                <div class="app-info">
+                                    <div class="app-icon-placeholder">FL</div>
+                                    <div class="app-details">
+                                        <h4>GeezVPN Framework</h4>
+                                        <p>High-Fidelity UI Foundations / Custom Flutter Proxy Optimization Protocol</p>
+                                    </div>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:15px;">
+                                    <a href="#" class="btn-link">Launch Project</a>
+                                    <span class="app-status">Live</span>
+                                </div>
+                            </div>
+
+                            <div class="app-row">
+                                <div class="app-info">
+                                    <div class="app-icon-placeholder">AN</div>
+                                    <div class="app-details">
+                                        <h4>Asquala Native Core</h4>
+                                        <p>Thread Concurrency Optimization / Core System Service Layer (Kotlin & Android SDK)</p>
+                                    </div>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:15px;">
+                                    <a href="#" class="btn-link">Get APK</a>
+                                    <span class="app-status">Live</span>
+                                </div>
+                            </div>
+
+                            <div class="app-row">
+                                <div class="app-info">
+                                    <div class="app-icon-placeholder">WB</div>
+                                    <div class="app-details">
+                                        <h4>Bolabol Web Hub</h4>
+                                        <p>Modular Performance Architecture / Distributed State Systems</p>
+                                    </div>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:15px;">
+                                    <a href="#" class="btn-link">Open Site</a>
+                                    <span class="app-status">Live</span>
+                                </div>
+                            </div>
+                        </section>
                     </div>
 
-                    <section class="console-card">
-                        <div class="card-title">Active Production Repositories</div>
-                        
-                        <div class="app-row">
-                            <div class="app-info">
-                                <div class="app-icon-placeholder">FL</div>
-                                <div class="app-details">
-                                    <h4>GeezVPN Framework</h4>
-                                    <p>High-Fidelity UI Foundations / Custom Flutter Proxy Optimization Protocol</p>
-                                </div>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:15px;">
-                                <a href="#" class="btn-link">Launch Project</a>
-                                <span class="app-status">Live</span>
-                            </div>
+                    <div id="monetization-tab" class="tab-view">
+                        <div class="dashboard-header">
+                            <h2>Monetization & Ad Networks</h2>
+                            <p>Global integration tracking for publishers and real-time app verification files.</p>
                         </div>
-
-                        <div class="app-row">
-                            <div class="app-info">
-                                <div class="app-icon-placeholder">AN</div>
-                                <div class="app-details">
-                                    <h4>Asquala Native Core</h4>
-                                    <p>Thread Concurrency Optimization / Core System Service Layer (Kotlin & Android SDK)</p>
+                        <section class="console-card">
+                            <div class="card-title">AdMob Status Summary</div>
+                            <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; margin-bottom:15px;">
+                                The background mapping engine successfully parses your localized file layout configuration.
+                            </p>
+                            <div class="app-row" style="background:rgba(0, 230, 118, 0.02); border-color:rgba(0, 230, 118, 0.15)">
+                                <div class="app-info">
+                                    <div class="app-icon-placeholder" style="background:rgba(0, 230, 118, 0.1); color:var(--success-color); border-color:rgba(0, 230, 118, 0.2)">TXT</div>
+                                    <div class="app-details">
+                                        <h4>app-ads.txt Crawler Registry</h4>
+                                        <p>Status: 200 OK / Indexed by Google AdMob network queries</p>
+                                    </div>
                                 </div>
+                                <span class="app-status" style="background:rgba(0,230,118,0.15)">Secured</span>
                             </div>
-                            <div style="display:flex; align-items:center; gap:15px;">
-                                <a href="#" class="btn-link">Get APK</a>
-                                <span class="app-status">Live</span>
-                            </div>
-                        </div>
-
-                        <div class="app-row">
-                            <div class="app-info">
-                                <div class="app-icon-placeholder">WB</div>
-                                <div class="app-details">
-                                    <h4>Bolabol Web Hub</h4>
-                                    <p>Modular Performance Architecture / Distributed State Systems</p>
-                                </div>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:15px;">
-                                <a href="#" class="btn-link">Open Site</a>
-                                <span class="app-status">Live</span>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <div id="monetization-tab" class="tab-view">
-                    <div class="dashboard-header">
-                        <h2>Monetization & Ad Networks</h2>
-                        <p>Global integration tracking for publishers and real-time app verification files.</p>
-                    </div>
-                    <section class="console-card">
-                        <div class="card-title">AdMob Status Summary</div>
-                        <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; margin-bottom:15px;">
-                            The background mapping engine successfully parses your localized file layout configuration.
-                        </p>
-                        <div class="app-row" style="background:rgba(0, 230, 118, 0.02); border-color:rgba(0, 230, 118, 0.15)">
-                            <div class="app-info">
-                                <div class="app-icon-placeholder" style="background:rgba(0, 230, 118, 0.1); color:var(--success-color); border-color:rgba(0, 230, 118, 0.2)">TXT</div>
-                                <div class="app-details">
-                                    <h4>app-ads.txt Crawler Registry</h4>
-                                    <p>Status: 200 OK / Indexed by Google AdMob network queries</p>
-                                </div>
-                            </div>
-                            <span class="app-status" style="background:rgba(0,230,118,0.15)">Secured</span>
-                        </div>
-                    </section>
-                </div>
-
-                <div id="profile-tab" class="tab-view">
-                    <div class="dashboard-header">
-                        <h2>Production Performance metrics</h2>
-                        <p>System tracking parameters across a 5-year multi-platform deployment lifecycle.</p>
+                        </section>
                     </div>
 
-                    <section class="metrics-grid">
-                        <div class="metric-card">
-                            <div class="metric-label">Professional Experience</div>
-                            <div class="metric-value">5 Years Active</div>
+                    <div id="profile-tab" class="tab-view">
+                        <div class="dashboard-header">
+                            <h2>Production Performance Metrics</h2>
+                            <p>System tracking parameters across a 5-year multi-platform deployment lifecycle.</p>
                         </div>
-                        <div class="metric-card">
-                            <div class="metric-label">System Deployments</div>
-                            <div class="metric-value">Enterprise Level</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-label">App Verification Stat</div>
-                            <div class="metric-value" style="color: var(--primary-accent);">Active / Secured</div>
-                        </div>
-                    </section>
 
-                    <section class="console-card">
-                        <div class="card-title">Core Engineering Summary</div>
-                        <p style="color: var(--text-muted); font-size:0.95rem; line-height:1.6;">
-                            Specializing in low-latency rendering execution loops, declarative state trees, unified cross-platform pipeline architectures via Flutter SDK, and reliable native lifecycle modules for custom deployment ecosystems.
-                        </p>
-                    </section>
+                        <section class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-label">Professional Experience</div>
+                                <div class="metric-value">5 Years Active</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">System Deployments</div>
+                                <div class="metric-value">Enterprise Level</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">App Verification Stat</div>
+                                <div class="metric-value" style="color: var(--primary-accent);">Active / Secured</div>
+                            </div>
+                        </section>
+
+                        <section class="console-card">
+                            <div class="card-title">Core Engineering Summary</div>
+                            <p style="color: var(--text-muted); font-size:0.95rem; line-height:1.6;">
+                                Specializing in low-latency rendering execution loops, declarative state trees, unified cross-platform pipeline architectures via Flutter SDK, and reliable native lifecycle modules for custom deployment ecosystems.
+                            </p>
+                        </section>
+                    </div>
+
                 </div>
-
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 
     <script>
-        // Tab Navigation Mechanism
-        function switchTab(tabId, element) {
-            // Remove active classes from all links
-            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-            // Hide all tab views
-            document.querySelectorAll('.tab-view').forEach(view => view.classList.remove('active-view'));
+        // --- View Routing System Architecture ---
+        function navigateToPage(pageId) {
+            // Hide all views
+            document.querySelectorAll('.page-view').forEach(view => {
+                view.classList.remove('active-view');
+            });
             
-            // Activate target components
+            // Activate structural block target
+            const targetPage = document.getElementById(pageId);
+            targetPage.classList.add('active-view');
+
+            // View configurations handling
+            if (pageId === 'dashboard-view') {
+                document.body.style.overflow = 'hidden'; // Lock scrolling on Pro Console layout
+                // Reset sidebar view selection status to default state
+                const defaultTab = document.getElementById('default-dashboard-tab');
+                switchTab('apps-tab', defaultTab);
+            } else {
+                document.body.style.overflowX = 'hidden';
+                document.body.style.overflowY = 'auto'; // Permit scrolling on landing layouts
+            }
+        }
+
+        // --- Sub-Tab Component Navigation Mechanism ---
+        function switchTab(tabId, element) {
+            // Un-assign active class indicators from sidebar navigation group buttons
+            element.parentElement.querySelectorAll('.nav-item').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Hide running dynamic view structures
+            document.querySelectorAll('.tab-view').forEach(view => {
+                view.classList.remove('active-view');
+            });
+            
+            // Activate components
             element.classList.add('active');
             document.getElementById(tabId).classList.add('active-view');
         }
 
-        // Background Canvas Rendering System
+        // --- Background Canvas Vector Rendering System ---
         const canvas = document.getElementById('vector-canvas');
         const ctx = canvas.getContext('2d');
 
         let points = [];
-        const maxDist = 110;
-        const mouse = { x: null, y: null, max: 200 };
+        const maxDist = 120;
+        const mouse = { x: null, y: null, max: 180 };
 
         function resize() {
             canvas.width = window.innerWidth;
@@ -518,13 +789,13 @@
 
         function initPoints() {
             points = [];
-            const count = Math.floor((canvas.width * canvas.height) / 9500);
+            const count = Math.floor((canvas.width * canvas.height) / 9000);
             for (let i = 0; i < count; i++) {
                 points.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5
+                    vx: (Math.random() - 0.5) * 0.6,
+                    vy: (Math.random() - 0.5) * 0.6
                 });
             }
         }
@@ -542,6 +813,7 @@
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
+            // Render Background Dots & Lines
             for (let i = 0; i < points.length; i++) {
                 let p = points[i];
                 p.x += p.vx;
@@ -550,19 +822,20 @@
                 if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-                ctx.fillStyle = 'rgba(0, 242, 254, 0.12)';
+                ctx.fillStyle = 'rgba(0, 242, 254, 0.15)';
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
+                ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
                 ctx.fill();
 
+                // Vector stick mechanics to mouse cursor
                 if (mouse.x !== null && mouse.y !== null) {
                     let dx = p.x - mouse.x;
                     let dy = p.y - mouse.y;
                     let dist = Math.sqrt(dx * dx + dy * dy);
                     if (dist < mouse.max) {
-                        let alpha = (1 - dist / mouse.max) * 0.22;
+                        let alpha = (1 - dist / mouse.max) * 0.25;
                         ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
-                        ctx.lineWidth = 0.7;
+                        ctx.lineWidth = 0.8;
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(mouse.x, mouse.y);
@@ -570,6 +843,7 @@
                     }
                 }
 
+                // Node connections logic
                 for (let j = i + 1; j < points.length; j++) {
                     let p2 = points[j];
                     let dx = p.x - p2.x;
@@ -577,9 +851,9 @@
                     let dist = Math.sqrt(dx * dx + dy * dy);
 
                     if (dist < maxDist) {
-                        let alpha = (1 - dist / maxDist) * 0.06;
+                        let alpha = (1 - dist / maxDist) * 0.08;
                         ctx.strokeStyle = `rgba(79, 172, 254, ${alpha})`;
-                        ctx.lineWidth = 0.5;
+                        ctx.lineWidth = 0.6;
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(p2.x, p2.y);
@@ -590,6 +864,7 @@
             requestAnimationFrame(animate);
         }
 
+        // Boot execution environment
         resize();
         animate();
     </script>
