@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Developer Console | Dashboard</title>
+    <title>Developer Console | Portfolio</title>
     <style>
         :root {
             --bg-color: #060b13;
@@ -32,7 +32,6 @@
             display: flex;
         }
 
-        /* Interactive Sticky Vector Background */
         #vector-canvas {
             position: fixed;
             top: 0;
@@ -43,7 +42,6 @@
             pointer-events: none;
         }
 
-        /* Console App Frame Layout */
         .console-frame {
             position: relative;
             z-index: 2;
@@ -54,7 +52,6 @@
             -webkit-backdrop-filter: blur(10px);
         }
 
-        /* Left Console Sidebar Navigation */
         .sidebar {
             width: 260px;
             background: var(--side-panel-bg);
@@ -68,12 +65,8 @@
         .console-brand {
             font-size: 1.15rem;
             font-weight: 800;
-            letter-spacing: 0.5px;
             color: #fff;
             margin-bottom: 40px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .console-brand span {
@@ -92,8 +85,7 @@
         }
 
         .nav-item {
-            display: flex;
-            align-items: center;
+            display: block;
             padding: 12px 16px;
             border-radius: 10px;
             color: var(--text-main);
@@ -101,10 +93,8 @@
             font-size: 0.95rem;
             font-weight: 500;
             margin-bottom: 6px;
-            transition: all 0.2s ease;
             background: transparent;
             border: none;
-            cursor: pointer;
             width: 100%;
             text-align: left;
         }
@@ -113,14 +103,8 @@
             background: rgba(0, 242, 254, 0.08);
             color: var(--primary-accent);
             font-weight: 600;
-            box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.05);
         }
 
-        .nav-item:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        /* Main Workspace Window Dashboard */
         .workspace {
             flex: 1;
             display: flex;
@@ -129,7 +113,6 @@
             overflow-y: auto;
         }
 
-        /* Top Bar Panel */
         .top-panel {
             height: 70px;
             border-bottom: 1px solid var(--card-border);
@@ -138,21 +121,6 @@
             justify-content: space-between;
             padding: 0 40px;
             background: rgba(10, 15, 26, 0.5);
-            animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .dev-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .profile-status {
-            width: 8px;
-            height: 8px;
-            background-color: var(--success-color);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--success-color);
         }
 
         .ads-txt-badge {
@@ -163,23 +131,10 @@
             border-radius: 30px;
             color: var(--success-color);
             text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
         }
 
-        .ads-txt-badge:hover {
-            background: rgba(0, 230, 118, 0.15);
-            box-shadow: 0 0 12px rgba(0, 230, 118, 0.2);
-        }
-
-        /* Content Area container view layout */
         .content-body {
             padding: 40px;
-            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .dashboard-header {
-            margin-bottom: 30px;
         }
 
         .dashboard-header h2 {
@@ -191,230 +146,181 @@
         .dashboard-header p {
             color: var(--text-muted);
             font-size: 0.95rem;
+            margin-bottom: 35px;
         }
 
-        /* Overview Metrics Grid */
-        .metrics-grid {
+        /* Interactive Showcase Grid */
+        .showcase-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
         }
 
-        @media (max-width: 900px) {
-            .metrics-grid { grid-template-columns: 1fr; }
-        }
-
-        .metric-card {
+        .project-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 24px;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
         }
 
-        .metric-card:hover {
-            border-color: rgba(0, 242, 254, 0.2);
-            transform: translateY(-2px);
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 242, 254, 0.3);
+            background: rgba(255, 255, 255, 0.04);
         }
 
-        .metric-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            font-weight: 600;
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
         }
 
-        .metric-value {
-            font-size: 1.75rem;
+        .app-meta h3 {
+            font-size: 1.2rem;
             font-weight: 700;
             color: #fff;
+            margin-bottom: 4px;
         }
 
-        /* Application Showcase Tables / Lists */
-        .console-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 30px;
-        }
-
-        .card-title {
-            font-size: 1.1rem;
+        .platform-badge {
+            font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 20px;
-            color: #fff;
-            border-bottom: 1px solid var(--card-border);
-            padding-bottom: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
         }
 
-        .app-row {
+        .platform-badge.flutter { background: rgba(0, 242, 254, 0.1); color: var(--primary-accent); }
+        .platform-badge.android { background: rgba(0, 230, 118, 0.1); color: var(--success-color); }
+        .platform-badge.web { background: rgba(79, 172, 254, 0.1); color: var(--secondary-accent); }
+
+        .project-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+
+        .action-group {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.01);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            margin-bottom: 12px;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
             transition: all 0.2s ease;
         }
 
-        .app-row:hover {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: rgba(79, 172, 254, 0.3);
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            color: #060b13;
         }
 
-        .app-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
+        .btn-primary:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 12px rgba(0, 242, 254, 0.2);
         }
 
-        .app-icon-placeholder {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(79, 172, 254, 0.2));
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--primary-accent);
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
         }
 
-        .app-details h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .app-details p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .app-status {
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: rgba(0, 230, 118, 0.1);
-            color: var(--success-color);
-            border: 1px solid rgba(0, 230, 118, 0.2);
-        }
-
-        /* Keyframe CSS Animations */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--text-muted);
         }
     </style>
 </head>
 <body>
 
-    <!-- Target Vector background component node layer -->
     <canvas id="vector-canvas"></canvas>
 
     <div class="console-frame">
-        <!-- Dashboard Sidebar Navigation -->
         <aside class="sidebar">
-            <div class="console-brand">
-                <span>DEV_CONSOLE</span> v2.6
-            </div>
-            
+            <div class="console-brand"><span>DEV_CONSOLE</span> v2.6</div>
             <nav>
-                <div class="nav-group-label">Developer Hub</div>
-                <button class="nav-item active">Application Management</button>
-                <button class="nav-item">Monetization Settings</button>
-                <button class="nav-item">API Integrations</button>
-                
-                <div class="nav-group-label" style="margin-top: 30px;">Account Info</div>
-                <button class="nav-item">Production Profile</button>
+                <div class="nav-group-label">Showcase</div>
+                <button class="nav-item active">Active Projects</button>
             </nav>
         </aside>
 
-        <!-- Main Content Area workspace window view -->
         <main class="workspace">
             <div class="top-panel">
-                <div class="dev-profile">
-                    <div class="profile-status"></div>
-                    <span style="font-weight: 600; font-size: 0.95rem;">Senior Software Engineer</span>
-                </div>
-                <!-- Interactive link straight to your text setup file configuration -->
+                <span style="font-weight: 600;">Portfolio Workspace</span>
                 <a href="app-ads.txt" class="ads-txt-badge" target="_blank">● app-ads.txt Verified</a>
             </div>
 
             <div class="content-body">
                 <div class="dashboard-header">
-                    <h2>Application Release Management</h2>
-                    <p>Overview tracking parameters of active systems built with Android Native, Web Ecosystems, and Flutter SDK platforms across a 5-year timeline.</p>
+                    <h2>Production Registry</h2>
+                    <p>Live catalog of production systems deployed across global platforms.</p>
                 </div>
 
-                <!-- Live Metrics Display -->
-                <section class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-label">Professional Experience</div>
-                        <div class="metric-value">5 Years Active</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">System Deployments</div>
-                        <div class="metric-value">Enterprise Level</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">App Verification Stat</div>
-                        <div class="metric-value" style="color: var(--primary-accent);">Active / Secured</div>
-                    </div>
-                </section>
-
-                <!-- Project Releases Cards Container -->
-                <section class="console-card">
-                    <div class="card-title">Deployed Systems Distribution & Status</div>
+                <!-- Live Client Showcase Grid -->
+                <section class="showcase-grid">
                     
-                    <div class="app-row">
-                        <div class="app-info">
-                            <div class="app-icon-placeholder">FL</div>
-                            <div class="app-details">
-                                <h4>Cross-Platform Mobile Architectures</h4>
-                                <p>High-Fidelity UI Foundations / Custom Reactive Engine Integration (Flutter & Dart)</p>
+                    <!-- App Card 1 -->
+                    <div class="project-card">
+                        <div class="card-top">
+                            <div class="app-meta">
+                                <h3>GeezVPN</h3>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Secure Network Infrastructure</p>
                             </div>
+                            <span class="platform-badge flutter">Flutter</span>
                         </div>
-                        <div class="app-status">Live / Published</div>
+                        <p class="project-desc">High-speed, encrypted proxy application constructed with clean reactive architecture, integrating robust AdMob optimization streams.</p>
+                        <div class="action-group">
+                            <a href="#" class="btn btn-primary">Launch App</a>
+                            <a href="#" class="btn btn-secondary">Source Code</a>
+                        </div>
                     </div>
 
-                    <div class="app-row">
-                        <div class="app-info">
-                            <div class="app-icon-placeholder">AN</div>
-                            <div class="app-details">
-                                <h4>Native Android Framework Deployments</h4>
-                                <p>Thread Concurrency Optimization / Core System Service Layer (Kotlin & Android SDK)</p>
+                    <!-- App Card 2 -->
+                    <div class="project-card">
+                        <div class="card-top">
+                            <div class="app-meta">
+                                <h3>Asquala</h3>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Educational Technology</p>
                             </div>
+                            <span class="platform-badge android">Android</span>
                         </div>
-                        <div class="app-status">Live / Published</div>
+                        <p class="project-desc">Native Android portal designed for optimized performance delivery, featuring background thread synchronization and clean core memory handling structures.</p>
+                        <div class="action-group">
+                            <a href="#" class="btn btn-primary">Download APK</a>
+                            <a href="#" class="btn btn-secondary">Source Code</a>
+                        </div>
                     </div>
 
-                    <div class="app-row">
-                        <div class="app-info">
-                            <div class="app-icon-placeholder">WB</div>
-                            <div class="app-details">
-                                <h4>Full-Scale High-Throughput Web Applications</h4>
-                                <p>Modular Performance Architecture / State Tree Systems & CSS Layering Structures</p>
+                    <!-- App Card 3 -->
+                    <div class="project-card">
+                        <div class="card-top">
+                            <div class="app-meta">
+                                <h3>Bolabol</h3>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Digital Asset System</p>
                             </div>
+                            <span class="platform-badge web">Web App</span>
                         </div>
-                        <div class="app-status">Live / Published</div>
+                        <p class="project-desc">Highly interactive creative canvas matrix ecosystem structured with fluid CSS animation timelines and optimized asset storage grids.</p>
+                        <div class="action-group">
+                            <a href="#" class="btn btn-primary">Open Console</a>
+                            <a href="#" class="btn btn-secondary">Asset Library</a>
+                        </div>
                     </div>
+
                 </section>
             </div>
         </main>
@@ -424,7 +330,6 @@
     <script>
         const canvas = document.getElementById('vector-canvas');
         const ctx = canvas.getContext('2d');
-
         let points = [];
         const maxDist = 110;
         const mouse = { x: null, y: null, max: 200 };
@@ -449,70 +354,46 @@
         }
 
         window.addEventListener('resize', resize);
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
+        window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
             for (let i = 0; i < points.length; i++) {
                 let p = points[i];
-                p.x += p.vx;
-                p.y += p.vy;
-
+                p.x += p.vx; p.y += p.vy;
                 if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
                 ctx.fillStyle = 'rgba(0, 242, 254, 0.12)';
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2); ctx.fill();
 
-                // Mouse cursor sticky magnetic logic
                 if (mouse.x !== null && mouse.y !== null) {
-                    let dx = p.x - mouse.x;
-                    let dy = p.y - mouse.y;
+                    let dx = p.x - mouse.x; let dy = p.y - mouse.y;
                     let dist = Math.sqrt(dx * dx + dy * dy);
                     if (dist < mouse.max) {
                         let alpha = (1 - dist / mouse.max) * 0.22;
                         ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
                         ctx.lineWidth = 0.7;
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(mouse.x, mouse.y);
-                        ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
                     }
                 }
 
-                // Vector point-to-point connections
                 for (let j = i + 1; j < points.length; j++) {
                     let p2 = points[j];
-                    let dx = p.x - p2.x;
-                    let dy = p.y - p2.y;
+                    let dx = p.x - p2.x; let dy = p.y - p2.y;
                     let dist = Math.sqrt(dx * dx + dy * dy);
-
                     if (dist < maxDist) {
                         let alpha = (1 - dist / maxDist) * 0.06;
                         ctx.strokeStyle = `rgba(79, 172, 254, ${alpha})`;
                         ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                     }
                 }
             }
             requestAnimationFrame(animate);
         }
-
-        resize();
-        animate();
+        resize(); animate();
     </script>
 </body>
 </html>
