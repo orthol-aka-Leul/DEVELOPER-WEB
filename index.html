@@ -6,16 +6,17 @@
     <title>Developer Console | Android, Web & Flutter Expert</title>
     <style>
         :root {
-            --bg-color: #0a0f1d;
-            --side-panel-bg: rgba(13, 22, 38, 0.7);
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(255, 255, 255, 0.08);
+            --bg-color: #050a15;
+            --side-panel-bg: rgba(9, 16, 32, 0.75);
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --card-border: rgba(255, 255, 255, 0.06);
             --primary-accent: #00f2fe;
             --secondary-accent: #4facfe;
             --success-color: #00e676;
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
             --sidebar-muted: #64748b;
+            --glow-color: rgba(0, 242, 254, 0.25);
         }
 
         * {
@@ -30,6 +31,7 @@
             color: var(--text-main);
             overflow-x: hidden;
             min-height: 100vh;
+            perspective: 1000px;
         }
 
         /* Vector Network Background Canvas */
@@ -41,21 +43,27 @@
             height: 100vh;
             z-index: 1;
             pointer-events: none;
+            transition: opacity 0.5s ease;
         }
 
-        /* --- View Management States --- */
+        /* --- Dynamic View Management Frame --- */
         .page-view {
             display: none;
             position: relative;
             z-index: 2;
             width: 100%;
+            opacity: 0;
+            transform: translate3d(0, 20px, 0);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .page-view.active-view {
             display: block;
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
         }
 
-        /* --- HOME PAGE STYLES --- */
+        /* --- HOME PAGE LOOK & ANIMATIONS --- */
         .console-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -69,41 +77,45 @@
             padding: 20px 30px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 16px;
             margin-bottom: 40px;
-            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            animation: slideDownFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .logo {
             font-size: 1.2rem;
             font-weight: 800;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
         }
 
         .ads-badge {
             font-size: 0.85rem;
-            padding: 6px 12px;
-            background: rgba(0, 242, 254, 0.1);
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            padding: 6px 14px;
+            background: rgba(0, 242, 254, 0.05);
+            border: 1px solid rgba(0, 242, 254, 0.2);
             border-radius: 20px;
             color: var(--primary-accent);
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .ads-badge:hover {
-            background: rgba(0, 242, 254, 0.2);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            background: rgba(0, 242, 254, 0.15);
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 20px var(--glow-color);
+            transform: scale(1.02);
         }
 
         .hero-dashboard {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
+            grid-template-columns: 1.25fr 0.75fr;
             gap: 30px;
             margin-bottom: 40px;
         }
@@ -115,49 +127,53 @@
         .main-panel {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 24px;
             padding: 50px 40px;
-            animation: fadeInLeft 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
+            animation: slideRightFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .experience-badge {
             display: inline-block;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.75rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             color: var(--secondary-accent);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            padding: 4px 10px;
+            background: rgba(79, 172, 254, 0.05);
+            border-radius: 6px;
+            border: 1px solid rgba(79, 172, 254, 0.1);
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.2rem;
             font-weight: 800;
             line-height: 1.15;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         h1 span {
-            background: linear-gradient(135deg, #ffffff 40%, var(--text-muted));
+            background: linear-gradient(135deg, #ffffff 30%, #a5b4fc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero-desc {
             color: var(--text-muted);
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 35px;
+            font-size: 1.15rem;
+            line-height: 1.65;
+            margin-bottom: 40px;
         }
 
-        /* Action Buttons Grid */
+        /* Dynamic Action Engine Trigger */
         .action-container {
             display: flex;
             gap: 15px;
-            margin-bottom: 35px;
-            flex-wrap: wrap;
+            margin-bottom: 40px;
         }
 
         .btn-primary {
@@ -165,21 +181,37 @@
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
-            color: #060b13;
+            color: #040812;
             font-weight: 700;
             font-size: 1rem;
-            padding: 14px 28px;
-            border-radius: 12px;
+            letter-spacing: 0.5px;
+            padding: 16px 32px;
+            border-radius: 14px;
             text-decoration: none;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 25px rgba(0, 242, 254, 0.2);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(0, 242, 254, 0.3);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 35px rgba(0, 242, 254, 0.4);
         }
 
         .stack-grid {
@@ -189,46 +221,55 @@
         }
 
         .tech-tag {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.01);
             border: 1px solid var(--card-border);
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-size: 0.95rem;
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-size: 0.9rem;
             font-weight: 500;
-            transition: all 0.3s ease;
+            color: #cbd5e1;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .tech-tag:hover {
             border-color: var(--primary-accent);
-            background: rgba(0, 242, 254, 0.02);
+            background: rgba(0, 242, 254, 0.03);
+            color: #fff;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.1);
         }
 
         .side-panel {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            animation: fadeInRight 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: slideLeftFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .stat-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 30px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 35px;
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.02) translateZ(10px);
+            border-color: rgba(79, 172, 254, 0.3);
         }
 
         .stat-num {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 800;
-            color: #fff;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             background: linear-gradient(135deg, #fff, var(--primary-accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -238,36 +279,34 @@
             color: var(--text-muted);
             font-size: 0.95rem;
             font-weight: 500;
+            line-height: 1.4;
         }
 
 
-        /* --- DASHBOARD VIEW STYLES --- */
+        /* --- CONSOLE WORKSPACE VIEW STYLES --- */
         .console-frame {
             display: flex;
             width: 100vw;
             height: 100vh;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
 
         .sidebar {
-            width: 260px;
+            width: 280px;
             background: var(--side-panel-bg);
             border-right: 1px solid var(--card-border);
             display: flex;
             flex-direction: column;
-            padding: 24px;
+            padding: 30px 24px;
         }
 
         .console-brand {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             font-weight: 800;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             color: #fff;
             margin-bottom: 40px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .console-brand span {
@@ -279,39 +318,42 @@
         .nav-group-label {
             font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             color: var(--sidebar-muted);
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             font-weight: 700;
         }
 
         .nav-item {
             display: flex;
             align-items: center;
-            padding: 12px 16px;
-            border-radius: 10px;
-            color: var(--text-main);
+            padding: 14px 18px;
+            border-radius: 12px;
+            color: var(--text-muted);
             text-decoration: none;
             font-size: 0.95rem;
             font-weight: 500;
-            margin-bottom: 6px;
-            transition: all 0.2s ease;
+            margin-bottom: 8px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             background: transparent;
-            border: none;
+            border: 1px solid transparent;
             cursor: pointer;
             width: 100%;
             text-align: left;
         }
 
         .nav-item.active {
-            background: rgba(0, 242, 254, 0.08);
+            background: rgba(0, 242, 254, 0.06);
+            border-color: rgba(0, 242, 254, 0.15);
             color: var(--primary-accent);
             font-weight: 600;
-            box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.05);
+            box-shadow: inset 0 0 15px rgba(0, 242, 254, 0.03);
+            transform: translateX(4px);
         }
 
         .nav-item:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-main);
         }
 
         .workspace {
@@ -320,16 +362,19 @@
             flex-direction: column;
             height: 100%;
             overflow-y: auto;
+            background: rgba(5, 10, 21, 0.4);
         }
 
         .top-panel {
-            height: 70px;
+            height: 75px;
             border-bottom: 1px solid var(--card-border);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 40px;
-            background: rgba(10, 15, 26, 0.5);
+            background: rgba(6, 11, 23, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .dev-profile {
@@ -339,63 +384,70 @@
         }
 
         .profile-status {
-            width: 8px;
-            height: 8px;
+            width: 9px;
+            height: 9px;
             background-color: var(--success-color);
             border-radius: 50%;
-            box-shadow: 0 0 8px var(--success-color);
+            box-shadow: 0 0 12px var(--success-color);
+            animation: statusPulse 2s infinite ease-in-out;
         }
 
         .ads-txt-badge {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             padding: 6px 14px;
-            background: rgba(0, 230, 118, 0.08);
-            border: 1px solid rgba(0, 230, 118, 0.25);
+            background: rgba(0, 230, 118, 0.05);
+            border: 1px solid rgba(0, 230, 118, 0.2);
             border-radius: 30px;
             color: var(--success-color);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .ads-txt-badge:hover {
-            background: rgba(0, 230, 118, 0.15);
-            box-shadow: 0 0 12px rgba(0, 230, 118, 0.2);
+            background: rgba(0, 230, 118, 0.12);
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.25);
         }
 
         .content-body {
             padding: 40px;
         }
 
+        /* Embedded Inner View Framework */
         .tab-view {
             display: none;
+            opacity: 0;
+            transform: translate3d(0, 10px, 0);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .tab-view.active-view {
             display: block;
-            animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
         }
 
         .dashboard-header {
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         .dashboard-header h2 {
-            font-size: 1.8rem;
+            font-size: 1.9rem;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
         .dashboard-header p {
             color: var(--sidebar-muted);
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         @media (max-width: 900px) {
@@ -405,27 +457,29 @@
         .metric-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 24px;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            border-radius: 18px;
+            padding: 26px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .metric-card:hover {
-            border-color: rgba(0, 242, 254, 0.2);
-            transform: translateY(-2px);
+            border-color: rgba(0, 242, 254, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
         }
 
         .metric-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             color: var(--sidebar-muted);
-            margin-bottom: 8px;
-            font-weight: 600;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
         .metric-value {
-            font-size: 1.75rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: #fff;
         }
@@ -433,112 +487,115 @@
         .console-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             color: #fff;
             border-bottom: 1px solid var(--card-border);
-            padding-bottom: 12px;
+            padding-bottom: 14px;
+            letter-spacing: 0.5px;
         }
 
         .app-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.01);
+            padding: 18px 22px;
+            background: rgba(255, 255, 255, 0.005);
             border: 1px solid var(--card-border);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            transition: all 0.2s ease;
+            border-radius: 16px;
+            margin-bottom: 14px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .app-row:hover {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: rgba(79, 172, 254, 0.3);
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(79, 172, 254, 0.25);
+            transform: scale(1.01);
         }
 
         .app-info {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 18px;
         }
 
         .app-icon-placeholder {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(79, 172, 254, 0.2));
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(79, 172, 254, 0.15));
+            border: 1px solid rgba(0, 242, 254, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 0.9rem;
+            font-weight: 800;
+            font-size: 0.95rem;
             color: var(--primary-accent);
         }
 
         .app-details h4 {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            color: #f8fafc;
         }
 
         .app-details p {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--sidebar-muted);
         }
 
         .app-status {
             font-size: 0.8rem;
-            font-weight: 600;
-            padding: 4px 10px;
+            font-weight: 700;
+            padding: 5px 12px;
             border-radius: 20px;
-            background: rgba(0, 230, 118, 0.1);
+            background: rgba(0, 230, 118, 0.08);
             color: var(--success-color);
-            border: 1px solid rgba(0, 230, 118, 0.2);
+            border: 1px solid rgba(0, 230, 118, 0.15);
         }
 
         .btn-link {
             font-size: 0.85rem;
             color: var(--primary-accent);
             text-decoration: none;
-            padding: 6px 12px;
-            border: 1px solid rgba(0, 242, 254, 0.2);
-            border-radius: 6px;
-            background: rgba(0, 242, 254, 0.02);
+            padding: 8px 16px;
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            border-radius: 8px;
+            background: rgba(0, 242, 254, 0.01);
+            font-weight: 500;
             transition: all 0.2s ease;
         }
 
         .btn-link:hover {
             background: rgba(0, 242, 254, 0.1);
-            box-shadow: 0 0 8px rgba(0, 242, 254, 0.3);
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
         }
 
-        /* --- Keyframe Animations --- */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* --- Animation Engines --- */
+        @keyframes slideDownFade {
+            from { opacity: 0; transform: translate3d(0, -20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
-
-        @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
+        @keyframes slideRightFade {
+            from { opacity: 0; transform: translate3d(-30px, 0, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
-
-        @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
+        @keyframes slideLeftFade {
+            from { opacity: 0; transform: translate3d(30px, 0, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes statusPulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 16px var(--success-color); }
         }
     </style>
 </head>
@@ -562,7 +619,7 @@
                     </p>
                     
                     <div class="action-container">
-                        <button class="btn-primary" onclick="navigateToPage('dashboard-view')">
+                        <button class="btn-primary" onclick="navigateToPage('dashboard-view')" onmouseover="accelerateParticles(true)" onmouseout="accelerateParticles(false)">
                             My Projects Dashboard ➔
                         </button>
                     </div>
@@ -597,7 +654,7 @@
                     <span>DEV_CONSOLE</span> v2.6
                 </div>
                 
-                <nav>
+                <nav style="display: flex; flex-direction: column; height: 100%;">
                     <div class="nav-group-label">Developer Hub</div>
                     <button class="nav-item active" id="default-dashboard-tab" onclick="switchTab('apps-tab', this)">Application Management</button>
                     <button class="nav-item" onclick="switchTab('monetization-tab', this)">Monetization Settings</button>
@@ -605,8 +662,8 @@
                     <div class="nav-group-label" style="margin-top: 30px;">Account Info</div>
                     <button class="nav-item" onclick="switchTab('profile-tab', this)">Production Profile</button>
 
-                    <div class="nav-group-label" style="margin-top: auto; padding-top: 20px;">Navigation</div>
-                    <button class="nav-item" onclick="navigateToPage('home-view')" style="border: 1px solid rgba(255,255,255,0.1); color: var(--primary-accent);">
+                    <div class="nav-group-label" style="margin-top: auto; padding-top: 20px;">Workspace Routing</div>
+                    <button class="nav-item" onclick="navigateToPage('home-view')" style="border: 1px solid rgba(0, 242, 254, 0.2); color: var(--primary-accent); background: rgba(0,242,254,0.02)">
                         ← Return Home
                     </button>
                 </nav>
@@ -616,7 +673,7 @@
                 <div class="top-panel">
                     <div class="dev-profile">
                         <div class="profile-status"></div>
-                        <span style="font-weight: 600; font-size: 0.95rem;">Senior Software Engineer</span>
+                        <span style="font-weight: 600; font-size: 0.95rem; color:#cbd5e1;">Senior Software Engineer</span>
                     </div>
                     <a href="app-ads.txt" class="ads-txt-badge" target="_blank">● app-ads.txt Verified</a>
                 </div>
@@ -683,18 +740,18 @@
                         </div>
                         <section class="console-card">
                             <div class="card-title">AdMob Status Summary</div>
-                            <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; margin-bottom:15px;">
+                            <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; margin-bottom:20px;">
                                 The background mapping engine successfully parses your localized file layout configuration.
                             </p>
-                            <div class="app-row" style="background:rgba(0, 230, 118, 0.02); border-color:rgba(0, 230, 118, 0.15)">
+                            <div class="app-row" style="background:rgba(0, 230, 118, 0.01); border-color:rgba(0, 230, 118, 0.15)">
                                 <div class="app-info">
-                                    <div class="app-icon-placeholder" style="background:rgba(0, 230, 118, 0.1); color:var(--success-color); border-color:rgba(0, 230, 118, 0.2)">TXT</div>
+                                    <div class="app-icon-placeholder" style="background:rgba(0, 230, 118, 0.08); color:var(--success-color); border-color:rgba(0, 230, 118, 0.2)">TXT</div>
                                     <div class="app-details">
                                         <h4>app-ads.txt Crawler Registry</h4>
                                         <p>Status: 200 OK / Indexed by Google AdMob network queries</p>
                                     </div>
                                 </div>
-                                <span class="app-status" style="background:rgba(0,230,118,0.15)">Secured</span>
+                                <span class="app-status" style="background:rgba(0,230,118,0.12)">Secured</span>
                             </div>
                         </section>
                     </div>
@@ -734,52 +791,52 @@
     </div>
 
     <script>
-        // --- View Routing System Architecture ---
+        // --- View Routing Control Architecture ---
         function navigateToPage(pageId) {
-            // Hide all views
-            document.querySelectorAll('.page-view').forEach(view => {
-                view.classList.remove('active-view');
-            });
-            
-            // Activate structural block target
-            const targetPage = document.getElementById(pageId);
-            targetPage.classList.add('active-view');
-
-            // View configurations handling
-            if (pageId === 'dashboard-view') {
-                document.body.style.overflow = 'hidden'; // Lock scrolling on Pro Console layout
-                // Reset sidebar view selection status to default state
-                const defaultTab = document.getElementById('default-dashboard-tab');
-                switchTab('apps-tab', defaultTab);
-            } else {
-                document.body.style.overflowX = 'hidden';
-                document.body.style.overflowY = 'auto'; // Permit scrolling on landing layouts
+            const currentActive = document.querySelector('.page-view.active-view');
+            if(currentActive) {
+                currentActive.classList.remove('active-view');
             }
+            
+            setTimeout(() => {
+                const targetPage = document.getElementById(pageId);
+                targetPage.classList.add('active-view');
+
+                if (pageId === 'dashboard-view') {
+                    document.body.style.overflow = 'hidden';
+                    const defaultTab = document.getElementById('default-dashboard-tab');
+                    switchTab('apps-tab', defaultTab);
+                } else {
+                    document.body.style.overflowX = 'hidden';
+                    document.body.style.overflowY = 'auto';
+                }
+            }, 150);
         }
 
-        // --- Sub-Tab Component Navigation Mechanism ---
+        // --- Sub-Tab Window Selector Mechanization ---
         function switchTab(tabId, element) {
-            // Un-assign active class indicators from sidebar navigation group buttons
             element.parentElement.querySelectorAll('.nav-item').forEach(btn => {
                 btn.classList.remove('active');
             });
-            // Hide running dynamic view structures
             document.querySelectorAll('.tab-view').forEach(view => {
                 view.classList.remove('active-view');
             });
             
-            // Activate components
             element.classList.add('active');
-            document.getElementById(tabId).classList.add('active-view');
+            // Mini delay initialization for sleek visual card stack popping
+            setTimeout(() => {
+                document.getElementById(tabId).classList.add('active-view');
+            }, 50);
         }
 
-        // --- Background Canvas Vector Rendering System ---
+        // --- Background Sticky Vector Engine Core ---
         const canvas = document.getElementById('vector-canvas');
         const ctx = canvas.getContext('2d');
 
         let points = [];
-        const maxDist = 120;
-        const mouse = { x: null, y: null, max: 180 };
+        let maxDist = 120;
+        let baseSpeedMultiplier = 1;
+        const mouse = { x: null, y: null, max: 190 };
 
         function resize() {
             canvas.width = window.innerWidth;
@@ -789,15 +846,21 @@
 
         function initPoints() {
             points = [];
-            const count = Math.floor((canvas.width * canvas.height) / 9000);
+            const count = Math.floor((canvas.width * canvas.height) / 8500);
             for (let i = 0; i < count; i++) {
                 points.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.6,
-                    vy: (Math.random() - 0.5) * 0.6
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5
                 });
             }
+        }
+
+        // Kinetic response acceleration function on hover interactions
+        function accelerateParticles(isHovered) {
+            baseSpeedMultiplier = isHovered ? 2.5 : 1;
+            maxDist = isHovered ? 150 : 120;
         }
 
         window.addEventListener('resize', resize);
@@ -813,29 +876,27 @@
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Render Background Dots & Lines
             for (let i = 0; i < points.length; i++) {
                 let p = points[i];
-                p.x += p.vx;
-                p.y += p.vy;
+                p.x += p.vx * baseSpeedMultiplier;
+                p.y += p.vy * baseSpeedMultiplier;
 
                 if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-                ctx.fillStyle = 'rgba(0, 242, 254, 0.15)';
+                ctx.fillStyle = 'rgba(0, 242, 254, 0.18)';
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Vector stick mechanics to mouse cursor
                 if (mouse.x !== null && mouse.y !== null) {
                     let dx = p.x - mouse.x;
                     let dy = p.y - mouse.y;
                     let dist = Math.sqrt(dx * dx + dy * dy);
                     if (dist < mouse.max) {
-                        let alpha = (1 - dist / mouse.max) * 0.25;
+                        let alpha = (1 - dist / mouse.max) * 0.28;
                         ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
-                        ctx.lineWidth = 0.8;
+                        ctx.lineWidth = 0.9;
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(mouse.x, mouse.y);
@@ -843,7 +904,6 @@
                     }
                 }
 
-                // Node connections logic
                 for (let j = i + 1; j < points.length; j++) {
                     let p2 = points[j];
                     let dx = p.x - p2.x;
@@ -851,9 +911,9 @@
                     let dist = Math.sqrt(dx * dx + dy * dy);
 
                     if (dist < maxDist) {
-                        let alpha = (1 - dist / maxDist) * 0.08;
+                        let alpha = (1 - dist / maxDist) * 0.09;
                         ctx.strokeStyle = `rgba(79, 172, 254, ${alpha})`;
-                        ctx.lineWidth = 0.6;
+                        ctx.lineWidth = 0.7;
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(p2.x, p2.y);
@@ -864,7 +924,6 @@
             requestAnimationFrame(animate);
         }
 
-        // Boot execution environment
         resize();
         animate();
     </script>
