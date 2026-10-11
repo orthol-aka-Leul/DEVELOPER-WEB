@@ -146,21 +146,23 @@
 
 
         /* Developer portrait */
-        .hero-portrait-wrap { display: flex; justify-content: center; margin: 0 auto 30px; position: relative; z-index: 3; }
+        .hero-portrait-wrap { display: flex; justify-content: center; margin: 0 auto clamp(18px, 3vw, 30px); position: relative; z-index: 3; padding-inline: 12px; }
         .hero-portrait {
-            display: block; width: clamp(150px, 24vw, 220px); aspect-ratio: 1 / 1;
-            object-fit: cover; object-position: center 28%; border-radius: 50%;
-            border: 3px solid rgba(0, 242, 254, 0.85);
+            display: block; width: clamp(112px, 24vw, 220px); max-width: 100%; height: auto;
+            aspect-ratio: 1 / 1; object-fit: cover; object-position: center 28%;
+            border-radius: 50%; border: 3px solid rgba(0, 242, 254, 0.85);
             box-shadow: 0 0 0 7px rgba(0, 242, 254, 0.07), 0 0 35px rgba(0, 242, 254, 0.22);
             background: var(--card-bg);
         }
         @media (min-width: 901px) { .hero-portrait-wrap { justify-content: center; } }
         .hero-name {
-            margin: -12px 0 30px;
+            margin: -8px 12px clamp(20px, 4vw, 30px);
             text-align: center;
-            font-size: clamp(1.35rem, 3vw, 1.8rem);
+            font-size: clamp(1.15rem, 5vw, 1.8rem);
+            line-height: 1.2;
+            overflow-wrap: anywhere;
             font-weight: 800;
-            letter-spacing: 0.4px;
+            letter-spacing: clamp(0px, 0.4vw, 0.4px);
             color: var(--text-main);
             text-shadow: 0 0 22px rgba(0, 242, 254, 0.18);
         }
