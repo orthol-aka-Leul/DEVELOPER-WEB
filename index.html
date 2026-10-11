@@ -155,6 +155,22 @@
             background: var(--card-bg);
         }
         @media (min-width: 901px) { .hero-portrait-wrap { justify-content: center; } }
+        .hero-name {
+            margin: -12px 0 30px;
+            text-align: center;
+            font-size: clamp(1.35rem, 3vw, 1.8rem);
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            color: var(--text-main);
+            text-shadow: 0 0 22px rgba(0, 242, 254, 0.18);
+        }
+        .hero-name span {
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
 
         .experience-badge {
             display: inline-block;
@@ -722,6 +738,7 @@
             <div class="hero-portrait-wrap">
                 <img class="hero-portrait" src="./profile.jpg" alt="Developer profile photo" width="220" height="220" fetchpriority="high">
             </div>
+            <h2 class="hero-name"><span>Leul Molla</span></h2>
             <section class="hero-dashboard">
                 <div class="main-panel">
                     <span class="experience-badge">Senior Engineer Portfolio</span>
